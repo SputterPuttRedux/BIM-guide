@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bim — A Local's Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ocean-deep: #0a1628;
+    --ocean-mid: #0e2240;
+    --ocean-surface: #122d52;
+    --teal-bright: #00b4d8;
+    --teal-glow: #48cae4;
+    --coral: #ff6b6b;
+    --sand: #f5e6c8;
+    --sand-warm: #e8d5a3;
+    --text-primary: #e8f4f8;
+    --text-secondary: #8ab4c8;
+    --text-muted: #4a7a95;
+    --card-bg: #0e2240;
+    --card-border: rgba(0,180,216,0.15);
+    --card-hover: rgba(0,180,216,0.08);
+    --panel-bg: #091524;
+    --tag-outdoors: #2d6a4f;
+    --tag-outdoors-text: #74c69d;
+    --tag-food: #7b2d00;
+    --tag-food-text: #ffa552;
+    --tag-beaches: #1a4a7a;
+    --tag-beaches-text: #74b9e8;
+    --subcategory-fancy: rgba(212,175,55,0.12);
+    --subcategory-fancy-text: #d4af37;
+    --subcategory-regular: rgba(100,180,100,0.12);
+    --subcategory-regular-text: #7ec87e;
+    --scrollbar: #1a3a5c;
+    --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  [data-theme="light"] {
+    --ocean-deep: #f0f7ff;
+    --ocean-mid: #dbeeff;
+    --ocean-surface: #c8e4f8;
+    --teal-bright: #0077a8;
+    --teal-glow: #005f87;
+    --coral: #d94f4f;
+    --sand: #3a2a10;
+    --sand-warm: #5a3e1b;
+    --text-primary: #0d2137;
+    --text-secondary: #2a5a7a;
+    --text-muted: #5a8aa8;
+    --card-bg: #ffffff;
+    --card-border: rgba(0,119,168,0.2);
+    --card-hover: rgba(0,119,168,0.06);
+    --panel-bg: #e8f4fb;
+    --tag-outdoors: #d4f0e0;
+    --tag-outdoors-text: #1a6640;
+    --tag-food: #ffe8d6;
+    --tag-food-text: #a03800;
+    --tag-beaches: #d6eeff;
+    --tag-beaches-text: #0a4a80;
+    --subcategory-fancy: rgba(180,140,20,0.12);
+    --subcategory-fancy-text: #8a6400;
+    --subcategory-regular: rgba(40,140,40,0.1);
+    --subcategory-regular-text: #2a7a2a;
+    --scrollbar: #bcd4e8;
+    --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--ocean-deep);
+    color: var(--text-primary);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: background var(--transition), color var(--transition);
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 28px;
+    background: var(--panel-bg);
+    border-bottom: 1px solid var(--card-border);
+    flex-shrink: 0;
+    z-index: 10;
+  }
+
+  .header-left { display: flex; flex-direction: column; gap: 2px; }
+
+  .site-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    line-height: 1;
+  }
+
+  .site-title span { color: var(--teal-bright); }
+
+  .site-subtitle {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 100px;
+    padding: 6px 14px 6px 10px;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    font-family: 'DM Sans', sans-serif;
+    transition: all var(--transition);
+  }
+  .theme-toggle:hover { border-color: var(--teal-bright); color: var(--text-primary); }
+  .toggle-icon { font-size: 1rem; }
+
+  .category-bar {
+    display: flex;
+    gap: 8px;
+    padding: 12px 20px;
+    background: var(--panel-bg);
+    border-bottom: 1px solid var(--card-border);
+    flex-shrink: 0;
+  }
+
+  .cat-tab {
+    padding: 6px 16px;
+    border-radius: 100px;
+    border: 1px solid var(--card-border);
+    background: transparent;
+    color: var(--text-secondary);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .cat-tab:hover {
+    background: var(--card-hover);
+    color: var(--text-primary);
+    border-color: var(--teal-bright);
+  }
+
+  .cat-tab.active {
+    background: var(--teal-bright);
+    border-color: var(--teal-bright);
+    color: #fff;
+  }
+
+  .cat-count {
+    background: rgba(255,255,255,0.2);
+    border-radius: 100px;
+    padding: 1px 7px;
+    font-size: 0.7rem;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .cat-tab:not(.active) .cat-count { background: var(--card-hover); }
+
+  .main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .sidebar {
+    width: 40%;
+    min-width: 320px;
+    max-width: 480px;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-right: 1px solid var(--card-border);
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar) transparent;
+  }
+
+  .sidebar::-webkit-scrollbar { width: 5px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--scrollbar); border-radius: 10px; }
+
+  .subcategory-divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 4px 4px;
+    margin-top: 8px;
+  }
+
+  .subcategory-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+  }
+
+  .subcategory-divider.fancy .subcategory-label { color: var(--subcategory-fancy-text); }
+  .subcategory-divider.regular .subcategory-label { color: var(--subcategory-regular-text); }
+
+  .subcategory-line {
+    flex: 1;
+    height: 1px;
+    opacity: 0.4;
+  }
+
+  .subcategory-divider.fancy .subcategory-line { background: var(--subcategory-fancy-text); }
+  .subcategory-divider.regular .subcategory-line { background: var(--subcategory-regular-text); }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 0;
+    cursor: pointer;
+    transition: all var(--transition);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    animation: slideIn 0.3s ease both;
+  }
+
+  .card-body {
+    padding: 12px 14px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: transparent;
+    transition: background var(--transition);
+    z-index: 2;
+  }
+
+  .card:hover { background: var(--card-hover); border-color: rgba(0,180,216,0.35); }
+  .card:hover::before { background: var(--teal-bright); }
+  .card.active { border-color: var(--teal-bright); background: var(--card-hover); }
+  .card.active::before { background: var(--teal-bright); }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .card-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-transform: capitalize;
+    line-height: 1.3;
+  }
+
+  .card-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 2px 8px;
+    border-radius: 100px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .tag-outdoors { background: var(--tag-outdoors); color: var(--tag-outdoors-text); }
+  .tag-food { background: var(--tag-food); color: var(--tag-food-text); }
+  .tag-beaches { background: var(--tag-beaches); color: var(--tag-beaches-text); }
+
+  .card-note {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+
+  .btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all var(--transition);
+  }
+
+  .btn-map {
+    background: rgba(0,180,216,0.12);
+    border-color: rgba(0,180,216,0.3);
+    color: var(--teal-glow);
+  }
+  .btn-map:hover { background: rgba(0,180,216,0.22); border-color: var(--teal-bright); }
+
+  .btn-directions {
+    background: rgba(255,107,107,0.1);
+    border-color: rgba(255,107,107,0.3);
+    color: var(--coral);
+  }
+  .btn-directions:hover { background: rgba(255,107,107,0.2); border-color: var(--coral); }
+
+  .btn-web {
+    background: transparent;
+    border-color: var(--card-border);
+    color: var(--text-muted);
+  }
+  .btn-web:hover { color: var(--text-secondary); border-color: var(--text-muted); }
+
+  .map-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: var(--panel-bg);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .map-header {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--card-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+
+  .map-location-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    font-style: italic;
+  }
+
+  .map-location-name.placeholder {
+    color: var(--text-muted);
+    font-style: italic;
+    font-size: 0.9rem;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .map-note-full {
+    padding: 10px 20px;
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    border-bottom: 1px solid var(--card-border);
+    font-style: italic;
+    max-height: 100px;
+    overflow-y: auto;
+    flex-shrink: 0;
+    display: none;
+  }
+  .map-note-full.visible { display: block; }
+
+  .map-container {
+    flex: 1;
+    position: relative;
+  }
+
+  .map-container iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+
+  .map-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    text-align: center;
+    padding: 40px;
+    background: var(--panel-bg);
+    transition: opacity var(--transition);
+  }
+  .map-placeholder.hidden { opacity: 0; pointer-events: none; }
+
+  .placeholder-icon {
+    font-size: 3.5rem;
+    opacity: 0.4;
+    animation: float 4s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .placeholder-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .placeholder-sub {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    max-width: 300px;
+    line-height: 1.6;
+  }
+
+  .map-iframe-wrapper {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+  .map-iframe-wrapper.visible { opacity: 1; pointer-events: all; }
+
+  .directions-bar {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    z-index: 5;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, bottom 0.3s ease;
+    white-space: nowrap;
+  }
+  .directions-bar.visible { opacity: 1; pointer-events: all; }
+
+  .directions-label { font-size: 0.8rem; color: var(--text-secondary); }
+  .directions-label strong { color: var(--text-primary); font-family: 'Playfair Display', serif; font-style: italic; }
+
+  .no-map-notice {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    text-align: center;
+    padding: 40px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition);
+  }
+  .no-map-notice.visible { opacity: 1; pointer-events: all; }
+  .no-map-notice .icon { font-size: 2.5rem; opacity: 0.4; }
+  .no-map-notice p { font-size: 0.85rem; color: var(--text-muted); max-width: 280px; line-height: 1.6; }
+
+  .card-image {
+    width: 100%;
+    height: 160px;
+    overflow: hidden;
+    background: var(--ocean-surface);
+    flex-shrink: 0;
+    display: block;
+  }
+
+  .card-image img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform 0.35s ease;
+  }
+
+  .card:hover .card-image img { transform: scale(1.04); }
+
+  .card-image-placeholder {
+    width: 100%;
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--ocean-surface) 0%, var(--ocean-mid) 100%);
+    color: var(--text-muted);
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-style: italic;
+    letter-spacing: -0.02em;
+    user-select: none;
+    position: relative;
+  }
+
+  .card-image-placeholder::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 8px,
+      rgba(255,255,255,0.015) 8px,
+      rgba(255,255,255,0.015) 16px
+    );
+  }
+
+  [data-theme="light"] .card-image-placeholder {
+    background: linear-gradient(135deg, #c8e4f8 0%, #dbeeff 100%);
+  }
+
+  @media (max-width: 768px) {
+    body { overflow: auto; height: auto; }
+    header { padding: 12px 16px; }
+    .site-title { font-size: 1.3rem; }
+    .site-subtitle { display: none; }
+    .theme-toggle span:last-child { display: none; }
+    .theme-toggle { padding: 6px 10px; }
+    .category-bar {
+      padding: 10px 12px;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      flex-wrap: nowrap;
+    }
+    .category-bar::-webkit-scrollbar { display: none; }
+    .cat-tab { font-size: 0.75rem; padding: 5px 12px; white-space: nowrap; flex-shrink: 0; }
+    .main { flex-direction: column; overflow: visible; }
+    .sidebar {
+      width: 100%;
+      max-width: 100%;
+      overflow-y: visible;
+      border-right: none;
+      border-bottom: 1px solid var(--card-border);
+      padding: 12px;
+      gap: 10px;
+    }
+    .map-panel { min-height: 480px; height: 480px; }
+    .directions-bar {
+      flex-direction: column;
+      gap: 8px;
+      bottom: 12px;
+      padding: 10px 14px;
+      text-align: center;
+    }
+    .map-note-full { max-height: 80px; font-size: 0.76rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <div class="site-title">&#127466;&#127463; Bim &mdash; <span>A Local's Guide</span></div>
+    <div class="site-subtitle">Barbados &middot; curated with love</div>
+  </div>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+    <span class="toggle-icon" id="themeIcon">&#9728;&#65039;</span>
+    <span id="themeLabel">Light mode</span>
+  </button>
+</header>
+
+<div class="category-bar">
+  <button class="cat-tab active" data-cat="all" onclick="filterCat('all', this)">
+    All <span class="cat-count" id="count-all">0</span>
+  </button>
+  <button class="cat-tab" data-cat="outdoors" onclick="filterCat('outdoors', this)">
+    &#127807; Outdoors &amp; Nature <span class="cat-count" id="count-outdoors">0</span>
+  </button>
+  <button class="cat-tab" data-cat="food" onclick="filterCat('food', this)">
+    &#127373;&#65039; Food &amp; Bars <span class="cat-count" id="count-food">0</span>
+  </button>
+  <button class="cat-tab" data-cat="beaches" onclick="filterCat('beaches', this)">
+    &#127958;&#65039; Beaches <span class="cat-count" id="count-beaches">0</span>
+  </button>
+</div>
+
+<div class="main">
+  <div class="sidebar" id="sidebar"></div>
+
+  <div class="map-panel">
+    <div class="map-header">
+      <div class="map-location-name placeholder" id="mapTitle">Select a location to explore</div>
+      <div id="mapActionBtn"></div>
+    </div>
+    <div class="map-note-full" id="mapNote"></div>
+    <div class="map-container">
+      <div class="map-placeholder" id="mapPlaceholder">
+        <div class="placeholder-icon">&#128506;&#65039;</div>
+        <div class="placeholder-text">Where to next?</div>
+        <div class="placeholder-sub">Pick any spot from the list and the map will load right here.</div>
+      </div>
+      <div class="map-iframe-wrapper" id="mapIframeWrapper"></div>
+      <div class="no-map-notice" id="noMapNotice">
+        <div class="icon">&#128279;</div>
+        <p>No embedded map for this one &mdash; but you can still open it in Google Maps or visit the website.</p>
+      </div>
+      <div class="directions-bar" id="directionsBar">
+        <span class="directions-label">Get directions to <strong id="directionsName"></strong></span>
+        <a class="btn btn-directions" id="directionsLink" href="#" target="_blank" rel="noopener">Open in Google Maps &rarr;</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var locations = [
+  {
+    name: "cherry tree hill",
+    category: "outdoors",
+    subcategory: null,
+    website: "https://barbados.org/chtree.htm",
+    gmaps: "https://maps.app.goo.gl/ZNZoxizTv1UJ3EYo9",
+    embed: "https://www.google.com/maps/embed?pb=!4v1776033470963!6m8!1m7!1sCAoSFkNJSE0wb2dLRUlDQWdJQzZxdnFhVnc.!2m2!1d13.27368336585808!2d-59.58517839597408!3f139.38223363770075!4f4.541247516950662!5f0.7820865974627469",
+    notes: "sweeping view of the east coast. I think it's the highest point in bim(?) there will be vendors selling wares"
+  },
+  {
+    name: "coco forest",
+    category: "outdoors",
+    subcategory: null,
+    website: "https://cocohillforest.com/hiking-tours/",
+    gmaps: "https://maps.app.goo.gl/DetfC1t7iXczCC316",
+    embed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3884.413554370918!2d-59.566355791769155!3d13.199332655908893!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c43f19eb10734ab%3A0x8206f3d44bb16710!2sCoco%20Hill%20Forest!5e0!3m2!1sen!2sus!4v1776033543175!5m2!1sen!2sus",
+    notes: "my favorite hike. is very tropical, somewhat strenuous, you might see green monkeys"
+  },
+  {
+    name: "bathsheba east coast hike",
+    category: "outdoors",
+    subcategory: null,
+    website: "https://www.alltrails.com/trail/barbados/saint-joseph/bathsheba-coastal-walk",
+    gmaps: "https://maps.app.goo.gl/VBZso6m8BXE9NLXs5",
+    embed: "https://www.google.com/maps/embed?pb=!4v1776034080540!6m8!1m7!1sCAoSF0NJSE0wb2dLRUlDQWdJQzZxckt4cEFF!2m2!1d13.19821944892694!2d-59.4963261754517!3f352.35571809856833!4f-10.1313627637319!5f0.7820865974627469",
+    notes: "very beautiful, not very strenuous hike. seems like it's a bit sketchy to get to b/c there's not an official trail head, but it's totally okay to just park your car near to where you want to start and just go from there. (I've done this 10s of times.) is VERY beautiful BUT there's not a lot of tree cover, so i would bring a small umbrella and lots of water"
+  },
+  {
+    name: "andromeda botanical garden",
+    category: "outdoors",
+    subcategory: null,
+    website: "https://andromedabarbados.com/",
+    gmaps: "https://maps.app.goo.gl/8yZGNvJRyyrb23Ga7",
+    embed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7768.581335770779!2d-59.521042424036764!3d13.207058887130374!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c43ed77d7e9767d%3A0x91ec532c4c0f957b!2sAndromeda%20Botanic%20Gardens!5e0!3m2!1sen!2sus!4v1776034184832!5m2!1sen!2sus",
+    notes: "just beautiful, and a nice place for a picnic. you'll likely see monkeys"
+  },
+  {
+    name: "animal flower cave",
+    category: "outdoors",
+    subcategory: null,
+    website: "https://www.animalflowercave.com/",
+    gmaps: "https://maps.app.goo.gl/HKjdgdEazsRv498C9",
+    embed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3882.2494789863263!2d-59.61579732403504!3d13.334751287014996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c43e8545febf38f%3A0x214218d7da7eb7ba!2sAnimal%20Flower%20Cave%20%26%20Restaurant!5e0!3m2!1sen!2sus!4v1776034287585!5m2!1sen!2sus",
+    notes: "is a cave that used to have a ton of sea anemones but b/c of climate change and shit, you'll only see a few but there is an absolutely BREATHTAKING view of the atlantic ocean from within the cave. If you have pool shoes i'd wear them b/c there's pools of ocean water that comes into the cave!"
+  },
+  {
+    name: "swim with the sea turtles",
+    category: "outdoors",
+    subcategory: null,
+    website: "https://harbourlightsbarbados.com/turtle-shipwreck-snorkel-tours",
+    gmaps: "",
+    embed: "",
+    notes: "okay, i have inner ear issues so i've never done this but my friends have and say it's great"
+  },
+  {
+    name: "catamaran tours",
+    category: "outdoors",
+    subcategory: null,
+    website: "https://www.coolrunningsbarbados.com/",
+    gmaps: "",
+    embed: "",
+    notes: "never done this either (inner ear bullshit) but i know they go out and anchor for a while and you can swim in the carribean. in my experience, it's a lot of folks who go on these tours so they can get good instagram content and stunt on their friends. so that's who'll be on these tours with you"
+  },
+  {
+    name: "harrison's cave",
+    category: "outdoors",
+    subcategory: null,
+    website: "https://chukka.com/barbados/harrisons-cave-eco-adventure-park",
+    gmaps: "https://maps.app.goo.gl/66Fxwvzej7fvTN4C9",
+    embed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3884.638543861161!2d-59.57711132403711!3d13.185175387150212!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c43f1ec8b4339ed%3A0x5585a04b344cb7c0!2sHarrison's%20Cave%20Eco-Adventure%20Park!5e0!3m2!1sen!2sus!4v1776034689200!5m2!1sen!2sus",
+    notes: "i've never done this, but folks say it's fun"
+  },
+  {
+    name: "mt. gay rum tour",
+    category: "food",
+    subcategory: null,
+    website: "https://www.mountgayrum.com/visitor-centre/",
+    gmaps: "https://maps.app.goo.gl/PsEGs3fZE9KXvZkx6",
+    embed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3885.7864845695267!2d-59.62911302403816!3d13.112708487215807!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c43f73beead752d%3A0xfa7881d254a7820!2sMount%20Gay%20Visitors'%20Centre!5e0!3m2!1sen!2sus!4v1776034888136!5m2!1sen!2sus",
+    notes: "it's hella fun, and you'll learn some history. there's other rum tours, but i think you get the most bang for your buck w/ this one. they have a tour in st. lucy and st. michael. i've only ever done the st. michael one."
+  },
+  {
+    name: "chill bar",
+    category: "food",
+    subcategory: null,
+    website: "",
+    gmaps: "https://maps.app.goo.gl/CwLCrgSHZSB9z6To9",
+    embed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15545.59018618505!2d-59.605861280679015!3d13.073972598439232!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c43f73f7f19a68b%3A0xa4b3625d39750daf!2sChill%20Café%20Bar%20%26%20Grill!5e0!3m2!1sen!2sus!4v1776034942388!5m2!1sen!2sus",
+    notes: "literally in the name. it's chill. you get locals and tourists. you get beautiful views of the south coast beaches and there's a boardwalk right in front."
+  },
+  {
+    name: "oistins",
+    category: "food",
+    subcategory: null,
+    website: "https://www.visitbarbados.org/whats-in-a-town-oistins",
+    gmaps: "https://maps.app.goo.gl/Ugw6xBtm4gEeKAibA",
+    embed: "https://www.google.com/maps/embed?pb=!4v1776035044771!6m8!1m7!1sCAoSF0NJSE0wb2dLRUlDQWdJQzZ5cUN2NndF!2m2!1d13.06366188968975!2d-59.5426429824823!3f220.42699249805605!4f-13.24212938194097!5f0.7820865974627469",
+    notes: "technically a whole place not just one restaurant. is a fish market but at night on thursdays there's a ton of tourist activities and it's actually cool. you can get fish platters and hear live music. when i lived there, i would go 2-3 times a week to get dinner. my favorite place there is Pat's place which is what the maps link goes to — i have had arguments with bajans about this tho b/c some of them say the place right behind it is better. can get drinks anywhere there."
+  },
+  {
+    name: "st. lawrence gap",
+    category: "food",
+    subcategory: null,
+    website: "https://barbados.org/stlaw.htm",
+    gmaps: "https://maps.app.goo.gl/vKwX1GUTMjCbLmwK9",
+    embed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31092.022914412202!2d-59.59040622301915!3d13.067284992340374!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c43f677b9f83807%3A0x9064b1126b3d1ad6!2sSaint%20Lawrence%20Gap%2C%20Oistins%2C%20Christ%20Church%20Barbados!5e0!3m2!1sen!2sus!4v1776035193589!5m2!1sen!2sus",
+    notes: "another whole strip of things. mostly bars and restaurants. is always live during tourist season. has restaurants and plenty of places to get drinks and music. honestly, i would just go and check it out bc there's too many restaurants/bars there for me to remember and you'll have a large choice of stuff. it's about 2-3 blocks long so it's not too overwhelming."
+  },
+  {
+    name: "tapas",
+    category: "food",
+    subcategory: "fancy",
+    website: "https://www.tapasbarbados.com/DMA/public/default.asp?",
+    gmaps: "https://maps.app.goo.gl/HnBUQwptnpgCGF4Q8",
+    embed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15545.597236820704!2d-59.60489548067896!3d13.07386069845034!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c43f65b75b9a439%3A0x12e3e64cf16dedd0!2sTapas!5e0!3m2!1sen!2sus!4v1776035249839!5m2!1sen!2sus",
+    notes: "it's fancy schmancy, but right on the boardwalk. like i said before barbados isn't really known for the food. I've had decent meals here, but it's more vibey than anything. they have good cocktails. you should try to make a reservation tho."
+  },
+  {
+    name: "animal flower cave restaurant",
+    category: "food",
+    subcategory: "fancy",
+    website: "https://www.animalflowercave.com/",
+    gmaps: "https://maps.app.goo.gl/HKjdgdEazsRv498C9",
+    embed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3882.2494789863263!2d-59.61579732403504!3d13.334751287014996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c43e8545febf38f%3A0x214218d7da7eb7ba!2sAnimal%20Flower%20Cave%20%26%20Restaurant!5e0!3m2!1sen!2sus!4v1776034287585!5m2!1sen!2sus",
+    notes: "so nice, i had to list it twice. there's a restaurant right next to the cave attraction. breathtaking views of the atlantic ocean and the food is always consistent and good."
+  },
+  {
+    name: "salt cafe",
+    category: "food",
+    subcategory: "fancy",
+    website: "https://www.facebook.com/saltcafebarbados/",
+    gmaps: "https://maps.app.goo.gl/qJSTeJcqjKsQPQbz9",
+    embed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15545.581509852289!2d-59.60260148067894!3d13.074110298425586!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c43f65c7cccab4d%3A0xa2cb123d89d5e1ff!2sSalt%20Café!5e0!3m2!1sen!2sus!4v1776035369232!5m2!1sen!2sus",
+    notes: "my favorite food spot. the food is good, but pricey. not direct beach views, but a good place to get a little meal."
+  },
+  {
+    name: "primo",
+    category: "food",
+    subcategory: "fancy",
+    website: "https://www.primobarandbistro.com/",
+    gmaps: "https://maps.app.goo.gl/ysKGjWLMG2qaxcLa8",
+    embed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3886.486480082898!2d-59.57524460000007!3d13.068325600000007!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c43f67018d91fdb%3A0x8f11cf008731571a!2sPrimo%20Bar%20%26%20Bistro!5e0!3m2!1sen!2sus!4v1776035447653!5m2!1sen!2sus",
+    notes: "the food is NOT worth it, but the cocktails are great. is on st. lawrence gap and has BEAUTIFUL views of the caribbean."
+  },
+  {
+    name: "worthing square",
+    category: "food",
+    subcategory: "regular",
+    website: "https://www.barbadosbarbados.com/dining/worthing-square-food-garden/",
+    gmaps: "https://maps.app.goo.gl/DZfHqL8LohT32vkd9",
+    embed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15545.700437730166!2d-59.592127380679244!3d13.07222269861275!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c43f72a3dadbf7b%3A0x4c49a3683af4089e!2sThe%20Worthing%20Square%20Food%20Court!5e0!3m2!1sen!2sus!4v1776035474002!5m2!1sen!2sus",
+    notes: "lots of food trucks, sometimes live music. the food is okay, but there's a variety of offerings."
+  },
+  {
+    name: "yelluh meat",
+    category: "food",
+    subcategory: "regular",
+    website: "https://www.yelluhmeat.com/",
+    gmaps: "https://maps.app.goo.gl/LYmWHHUUTehuafWM9",
+    embed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15542.901595665682!2d-59.62789198067229!3d13.116574594209217!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c43f72f417c5dcf%3A0xb1157e04467e3a93!2sYelluh%20Meat!5e0!3m2!1sen!2sus!4v1776035574277!5m2!1sen!2sus",
+    notes: "this place is GOOD. but a little hard to get to b/c it's close to bridgetown. its roasted breadfruit w/ DELICIOUS stews on top."
+  },
+  {
+    name: "lisa's roti",
+    category: "food",
+    subcategory: "regular",
+    website: "https://www.instagram.com/lisasdoublesandroti/?hl=en",
+    gmaps: "https://maps.app.goo.gl/VYYf8V9f5YG3FQCQ6",
+    embed: "https://www.google.com/maps/embed?pb=!4v1776033073823!6m8!1m7!1sCAoSFkNJSE0wb2dLRUlDQWdJQzZ5dENrS2c.!2m2!1d13.07049704201808!2d-59.57855792166701!3f129.24120559868607!4f-0.0690792553502746!5f0.7820865974627469",
+    notes: "THE BEST ROTI YOU WILL GET IN BARBADOS HANDS DOWN. she has a tent with a red awning on Worthing Main Road. I don't know her hours, but if you go around lunchtime you should find her. She should be right next to a store called Vape & Smoke Thingies."
+  },
+  {
+    name: "chicken barn",
+    category: "food",
+    subcategory: "regular",
+    website: "https://www.instagram.com/chickenbarnbarbados/",
+    gmaps: "https://maps.app.goo.gl/5D5ERda3EeedsRuVA",
+    embed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15544.867834210658!2d-59.51237128067717!3d13.085431997302504!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c43f4ec1e451469%3A0x5ea8cab88edf80bd!2sChicken%20Barn%20Coverley%20Town%20Square!5e0!3m2!1sen!2sus!4v1776035633136!5m2!1sen!2sus",
+    notes: "my bajan friends make fun of me b/c i really like this chicken. i would get a super snack box w/ dark meat and fries if you try it. I would go to the coverly location. the fries are fine, but the chicken tastes like chicken used to taste in the us 30 years ago. that's all i have to say about that."
+  },
+  {
+    name: "just grillin",
+    category: "food",
+    subcategory: "regular",
+    website: "https://justgrillinbarbados.com/",
+    gmaps: "https://maps.app.goo.gl/ttdP28MLb4Krys8N6",
+    embed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3886.3802121300546!2d-59.589481000000006!3d13.075073!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c43f65dc8a482bf%3A0xd1791d5f2a812122!2sJust%20Grillin'%20Quayside!5e0!3m2!1sen!2sus!4v1776035811167!5m2!1sen!2sus",
+    notes: "easy peasy no fuss grilled food. is somewhat touristy and expensive, but consistent. I like it. there are two locations. i'm giving you directions to the one in south coast."
+  },
+  {
+    name: "granny's",
+    category: "food",
+    subcategory: "regular",
+    website: "https://www.facebook.com/grannysbarbados/",
+    gmaps: "https://maps.app.goo.gl/uyrrt8EW5w6rwkAE9",
+    embed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15546.23847682693!2d-59.55209928068066!3d13.063679699459579!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c43f5c7f2f09cfb%3A0x344f62ac227b35d6!2sGranny's%20Restaurant!5e0!3m2!1sen!2sus!4v1776035896193!5m2!1sen!2sus",
+    notes: "AUTHENTIC bajan food. I never know when this lady's restaurant is open. it's in oistins and if you can get it, i would just so you can have actual local food."
+  },
+  {
+    name: "Browne's / Pebbles Beach",
+    category: "beaches",
+    subcategory: null,
+    website: "https://www.visitbarbados.org/brownes-beach",
+    gmaps: "https://maps.app.goo.gl/wCwbP7GiaNdbhNZp6",
+    embed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1943.1084768902097!2d-59.6096331!3d13.085432300000011!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c43f6ffdcaa1175%3A0x33d895b0bb942666!2sBrownes%20Beach!5e0!3m2!1sen!2sus!4v1776035921430!5m2!1sen!2sus",
+    notes: "locals and tourists go here. is in st. michael so the water tends to be calm."
+  },
+  {
+    name: "Miami Beach",
+    category: "beaches",
+    subcategory: null,
+    website: "https://barbados.org/bcmiami.htm",
+    gmaps: "https://maps.app.goo.gl/PHoERQrtwWXwJk8z5",
+    embed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15546.45467517606!2d-59.55005018068119!3d13.060245349799876!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c43f5b8c7df1ded%3A0xe9f9132668e54cb!2sMiami%20Beach%2C%20Barbados!5e0!3m2!1sen!2sus!4v1776035970947!5m2!1sen!2sus",
+    notes: "locals also go here but if you go on the left side there's umbrellas and chairs. this one can be a lil choppier when the tide is coming back in. tourists will call this enterprise beach. that is not what locals call it."
+  },
+  {
+    name: "Thunder Bay",
+    category: "beaches",
+    subcategory: null,
+    website: "https://www.instagram.com/thunder.bay.beach.bar/",
+    gmaps: "https://maps.app.goo.gl/TB7EoVYkF2jdQAHB9",
+    embed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15536.329758206772!2d-59.651823280655734!3d13.220140683879674!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c43efdc4f723b83%3A0x1311a01763778113!2sThunder%20Bay%20Beach%20Bar!5e0!3m2!1sen!2sus!4v1776036079306!5m2!1sen!2sus",
+    notes: "west coast beach, very calm. has a couple of beach bars, has chairs and sometimes they grill breadfruit. oh and rihanna lives up near here somewhere. I've also seen the prime minister on this beach."
+  },
+  {
+    name: "Nikki Beach",
+    category: "beaches",
+    subcategory: null,
+    website: "https://www.visitbarbados.org/nikki-beach-barbados",
+    gmaps: "https://maps.app.goo.gl/RM76Yc2CFffMJDxf8",
+    embed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15533.312915783705!2d-59.65473168064812!3d13.267417379142568!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c43ef6f6e804419%3A0x9a6cb645361b283a!2sNikki%20Beach%20Barbados!5e0!3m2!1sen!2sus!4v1776036178643!5m2!1sen!2sus",
+    notes: "(my absolute favorite beach on the whole island) but is a little hard to get to b/c the only entrance is from a bridge — is very calm, beautiful and picturesque, but no lifeguards and is kind of like a neighborhood beach. may not be called this any more b/c it was re-named to nikki beach bc there was a 'nikki' resort there that folded during covid. the google maps listing will say it's closed but it's not. all beaches are public in barbados."
+  }
+];
+
+var activeIndex = null;
+var currentFilter = 'all';
+
+var tagLabel = { outdoors: 'Outdoors', food: 'Food & Bars', beaches: 'Beach' };
+var subcatConfig = {
+  fancy:   { cls: 'fancy',   label: '&#10024; Fancy / Schmancy' },
+  regular: { cls: 'regular', label: '&#127193; Regular / Degular but Worthwhile' }
+};
+
+function slugify(name) {
+  return name.toLowerCase()
+    .replace(/['']/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function cardImageHTML(loc) {
+  var slug = slugify(loc.name);
+  var initial = loc.name.trim()[0].toUpperCase();
+  return '<div class="card-image">' +
+    '<img src="images/' + slug + '.jpg" alt="' + loc.name + '" ' +
+    'data-slug="' + slug + '" data-initial="' + initial + '" data-tried="0" ' +
+    'onerror="(function(el){' +
+      'var exts=[\'jpg\',\'jpeg\',\'png\',\'webp\'];' +
+      'var tried=parseInt(el.dataset.tried)+1;' +
+      'if(tried<exts.length){el.dataset.tried=tried;el.src=\'images/\'+el.dataset.slug+\'.\'+exts[tried];}' +
+      'else{el.parentElement.innerHTML=\'<div class=\\\'card-image-placeholder\\\'>\'+el.dataset.initial+\'</div>\';}' +
+    '})(this)"' +
+    '/></div>';
+}
+
+function renderCards(filter) {
+  var sidebar = document.getElementById('sidebar');
+  sidebar.innerHTML = '';
+
+  var visible = locations.filter(function(l) {
+    return filter === 'all' || l.category === filter;
+  });
+
+  var lastSubcat = '__none__';
+
+  visible.forEach(function(loc, i) {
+    var globalIdx = locations.indexOf(loc);
+    var subcat = loc.subcategory || null;
+
+    if (subcat !== lastSubcat) {
+      if (subcat && subcatConfig[subcat]) {
+        var cfg = subcatConfig[subcat];
+        var div = document.createElement('div');
+        div.className = 'subcategory-divider ' + cfg.cls;
+        div.innerHTML = '<div class="subcategory-label">' + cfg.label + '</div><div class="subcategory-line"></div>';
+        sidebar.appendChild(div);
+      }
+      lastSubcat = subcat;
+    }
+
+    var card = document.createElement('div');
+    card.className = 'card' + (activeIndex === globalIdx ? ' active' : '');
+    card.style.animationDelay = (i * 0.03) + 's';
+    card.dataset.idx = globalIdx;
+
+    var actions = [];
+    if (loc.embed) {
+      actions.push('<button class="btn btn-map" onclick="showMap(' + globalIdx + ', event)">&#128506; View on map</button>');
+    }
+    if (loc.gmaps) {
+      actions.push('<a class="btn btn-directions" href="' + loc.gmaps + '" target="_blank" rel="noopener">&#128205; Directions</a>');
+    }
+    if (loc.website) {
+      actions.push('<a class="btn btn-web" href="' + loc.website + '" target="_blank" rel="noopener">&#128279; Website</a>');
+    }
+
+    card.innerHTML =
+      cardImageHTML(loc) +
+      '<div class="card-body">' +
+        '<div class="card-header">' +
+          '<div class="card-name">' + loc.name + '</div>' +
+          '<span class="card-tag tag-' + loc.category + '">' + tagLabel[loc.category] + '</span>' +
+        '</div>' +
+        (loc.notes ? '<div class="card-note">' + loc.notes + '</div>' : '') +
+        (actions.length ? '<div class="card-actions">' + actions.join('') + '</div>' : '') +
+      '</div>';
+
+    card.addEventListener('click', function(e) {
+      if (e.target.closest('.btn')) return;
+      showMap(globalIdx);
+    });
+
+    sidebar.appendChild(card);
+  });
+}
+
+function showMap(idx, e) {
+  if (e) e.stopPropagation();
+  var loc = locations[idx];
+  activeIndex = idx;
+
+  document.querySelectorAll('.card').forEach(function(c) { c.classList.remove('active'); });
+  var activeCard = document.querySelector('.card[data-idx="' + idx + '"]');
+  if (activeCard) {
+    activeCard.classList.add('active');
+    activeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  var title = document.getElementById('mapTitle');
+  title.textContent = loc.name;
+  title.classList.remove('placeholder');
+
+  var noteEl = document.getElementById('mapNote');
+  if (loc.notes) {
+    noteEl.textContent = '"' + loc.notes + '"';
+    noteEl.classList.add('visible');
+  } else {
+    noteEl.classList.remove('visible');
+  }
+
+  var placeholder = document.getElementById('mapPlaceholder');
+  var wrapper = document.getElementById('mapIframeWrapper');
+  var noMap = document.getElementById('noMapNotice');
+  var dirBar = document.getElementById('directionsBar');
+
+  placeholder.classList.add('hidden');
+  noMap.classList.remove('visible');
+
+  if (loc.embed) {
+    wrapper.innerHTML = '<iframe src="' + loc.embed + '" width="100%" height="100%" style="border:0;display:block;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>';
+    wrapper.classList.add('visible');
+  } else {
+    wrapper.innerHTML = '';
+    wrapper.classList.remove('visible');
+    noMap.classList.add('visible');
+  }
+
+  if (loc.gmaps) {
+    document.getElementById('directionsName').textContent = loc.name;
+    document.getElementById('directionsLink').href = loc.gmaps;
+    dirBar.classList.add('visible');
+  } else {
+    dirBar.classList.remove('visible');
+  }
+}
+
+function filterCat(cat, btn) {
+  currentFilter = cat;
+  document.querySelectorAll('.cat-tab').forEach(function(t) { t.classList.remove('active'); });
+  btn.classList.add('active');
+  activeIndex = null;
+
+  document.getElementById('mapTitle').textContent = 'Select a location to explore';
+  document.getElementById('mapTitle').classList.add('placeholder');
+  document.getElementById('mapNote').classList.remove('visible');
+  document.getElementById('mapPlaceholder').classList.remove('hidden');
+  document.getElementById('mapIframeWrapper').innerHTML = '';
+  document.getElementById('mapIframeWrapper').classList.remove('visible');
+  document.getElementById('noMapNotice').classList.remove('visible');
+  document.getElementById('directionsBar').classList.remove('visible');
+
+  renderCards(cat);
+}
+
+function toggleTheme() {
+  var html = document.documentElement;
+  var isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('themeIcon').textContent = isDark ? '🌙' : '☀️';
+  document.getElementById('themeLabel').textContent = isDark ? 'Dark mode' : 'Light mode';
+}
+
+function setCounts() {
+  document.getElementById('count-all').textContent = locations.length;
+  document.getElementById('count-outdoors').textContent = locations.filter(function(l) { return l.category === 'outdoors'; }).length;
+  document.getElementById('count-food').textContent = locations.filter(function(l) { return l.category === 'food'; }).length;
+  document.getElementById('count-beaches').textContent = locations.filter(function(l) { return l.category === 'beaches'; }).length;
+}
+
+setCounts();
+renderCards('all');
+</script>
+</body>
+</html>
